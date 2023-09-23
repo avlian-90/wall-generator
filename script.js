@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
           for (let j = 0; j < width; j++) {
               const brick = document.createElement('div');
               brick.classList.add('brick');
-              const randomColor = getRandomColor(colorCount);
+              const randomColor = generateRandomColor(colorCount);
               brick.style.backgroundColor = randomColor;
               brick.addEventListener('click', function () {
                   inverter(i, j, array);
@@ -52,13 +52,30 @@ document.addEventListener('DOMContentLoaded', function () {
       }
   }
 
-  function getRandomColor(colorCount) {
+  function getRandomColor() {
 
-      const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'black', 'white', 'aqua', 'lightblue'];
-      return colors[Math.floor(Math.random() * colorCount)];
+      const red = Math.floor(Math.random() * 255);
+      const green = Math.floor(Math.random() * 255);
+      const blue = Math.floor(Math.random() * 255);
+      const randomColor = `rgb(${red}, ${green}, ${blue})`;
+
+      return randomColor;
   }
 
-  function invertCrosswiseColors(row, column, array) {
+  function generateRandomColor(colorCount) {
+
+    const colors = [];
+
+    for (let i = 0; i < colorCount; i++) {
+      const randomColor = getRandomColor();
+      colors.push(randomColor);
+    }
+    const randomColor = colors[Math.floor(Math.random() * colorCount)];
+
+    return randomColor;
+  }
+
+  function invertCrosswiseColors(row, column, array, color) {
     
       for (let i = 0; i < array[row].length; i++) {
           array[row][i].style.backgroundColor = invertColor(array[row][i].style.backgroundColor);   
@@ -71,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
   }
 
-  function invertDiagonalColors(row, column, array) {
+  function invertDiagonalColors(row, column, array, color) {
 
     for (let i = 0; i < array.length; i++) {
       const j = column + (i - row);
@@ -89,32 +106,17 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function invertColor(color) {
+   
+    const parts = color.match(/\d+/g);
+    const [r, g, b] = parts;
 
-    return 'white';
+    const oppositeR = 255 - parseInt(r, 10);
+    const oppositeG = 255 - parseInt(g, 10);
+    const oppositeB = 255 - parseInt(b, 10);
 
-    // This is for the case if the task requires to change each color to its opposite color.
+    const oppositeColor = `rgb(${oppositeR}, ${oppositeG}, ${oppositeB})`;
 
-      // if (color === 'black') {
-      //   return 'white';
-      // } else if (color === 'red') {
-      //   return 'aqua';
-      // } else if (color === 'green') {
-      //   return 'purple';
-      // } else if (color === 'lightblue') {
-      //   return 'orange';
-      // } else if (color === 'yellow') {
-      //   return 'blue';
-      // } else if (color === 'blue') {
-      //   return 'yellow';
-      // } else if (color === 'orange') {
-      //   return 'lightblue';
-      // } else if (color === 'purple') {
-      //   return 'green';
-      // } else if (color === 'aqua') {
-      //   return 'red';
-      // } else if (color === 'white') {
-      //   return 'black';
-      // }
+    return oppositeColor;
   }
 });
 
